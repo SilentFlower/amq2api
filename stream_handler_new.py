@@ -203,11 +203,14 @@ class AmazonQStreamHandler:
             full_tool_inputs = "".join(self.all_tool_inputs)
             output_tokens = self._count_tokens(full_text_response + full_tool_inputs)
             
+            # 计算总 token 数量（输入 + 输出）
+            total_tokens = self.input_tokens + output_tokens
+            
             logger.info(f"Token 统计 - 输入: {self.input_tokens}, 输出: {output_tokens} (文本: {len(full_text_response)} 字符, tool inputs: {len(full_tool_inputs)} 字符)")
 
             cli_event = build_claude_message_stop_event(
                 self.input_tokens,
-                output_tokens,
+                total_tokens,
                 "end_turn"
             )
             yield cli_event
