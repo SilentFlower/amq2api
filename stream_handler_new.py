@@ -328,10 +328,11 @@ class AmazonQStreamHandler:
                 logger.debug(f"发送 content_block_stop: index={self.content_block_index}")
                 yield cli_event
 
-                # 标记 content_block_stop 已发送，避免重复发送
-                self.content_block_stop_sent = True
-                # 重置 content_started 状态
+                # 重置状态，准备下一个 content block
+                self.content_block_stop_sent = False  # 重置为 False，允许下一个块
+
                 self.content_block_started = False
+                self.content_block_start_sent = False  # 也重置 start 标志
 
                 # 清理状态
                 self.current_tool_use = None
